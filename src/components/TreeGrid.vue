@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted } from 'vue';
 import { AgGridVue } from 'ag-grid-vue3';
 
 import {
@@ -8,6 +8,7 @@ import {
   type GridApi,
   type GridReadyEvent,
   type GetDataPath,
+  type ICellRendererParams,
 } from 'ag-grid-community';
 import { AllCommunityModule } from 'ag-grid-community';
 import { AllEnterpriseModule } from 'ag-grid-enterprise';
@@ -25,13 +26,13 @@ const props = defineProps<{
   initialItems: TreeNode[];
 }>();
 
-const store = ref(new TreeStore(props.initialItems));
+const store = new TreeStore(props.initialItems);
 const gridApi = ref<GridApi | null>(null);
 
 const rowData = ref<TreeNode[]>([]);
 
 const updateRowData = () => {
-  rowData.value = store.value.getAll();
+  rowData.value = store.getAll();
 };
 
 onMounted(() => {
@@ -44,7 +45,7 @@ onMounted(() => {
  * getAllParents ДОЛЖЕН включать сам элемент
  */
 const getDataPath: GetDataPath = (data: TreeNode) => {
-  return store.value
+  return store
     .getAllParents(data.id)
     .map(p => String(p.id))
     .reverse();
@@ -78,11 +79,11 @@ const autoGroupColumnDef = ref<ColDef>({
   minWidth: 220,
   cellRendererParams: {
     suppressCount: true,
-    innerRenderer: (params: any) => {
+    innerRenderer: (params: ICellRendererParams<TreeNode>) => {
       if (!params.data) return '';
 
       const hasChildren =
-        store.value.getChildren(params.data.id).length > 0;
+        store.getChildren(params.data.id).length > 0;
 
       return hasChildren ? 'Группа' : 'Элемент';
     },
@@ -95,12 +96,12 @@ const onGridReady = (params: GridReadyEvent) => {
 };
 
 /**
- * Обновление грида — без костылей
+ * Обновление грида
  */
-const refreshGrid = async () => {
+const refreshGrid = () => {
   updateRowData();
-  await nextTick();
-  gridApi.value?.expandAll();
+  // Если необходимо, асинхронное раскрытие можно сделать позже
+  setTimeout(() => gridApi.value?.expandAll(), 50);
 };
 
 /**
@@ -112,13 +113,13 @@ const onAddItem = async () => {
 
   const selected = gridApi.value?.getSelectedRows()[0];
 
-  store.value.addItem({
+  store.addItem({
     id: crypto.randomUUID(),
     parent: selected?.id ?? null,
     label,
   });
 
-  await refreshGrid();
+  refreshGrid();
 };
 
 const onRemoveItem = async () => {
@@ -129,8 +130,8 @@ const onRemoveItem = async () => {
   }
 
   if (confirm(`Удалить "${selected.label}"?`)) {
-    store.value.removeItem(selected.id);
-    await refreshGrid();
+    store.removeItem(selected.id);
+    refreshGrid();
   }
 };
 
@@ -144,12 +145,12 @@ const onUpdateItem = async () => {
   const label = prompt('Новое имя:', selected.label);
   if (!label) return;
 
-  store.value.updateItem({
+  store.updateItem({
     ...selected,
     label,
   });
 
-  await refreshGrid();
+  refreshGrid();
 };
 </script>
 

@@ -10,7 +10,7 @@ export class TreeStore {
   }
 
   private init(items: TreeNode[]) {
-    this.items = items;
+    this.items = [...items];
     this.itemsMap.clear();
     this.childrenMap.clear();
 
@@ -28,7 +28,7 @@ export class TreeStore {
 
   /** O(1) */
   getAll(): TreeNode[] {
-    return this.items;
+    return this.items.slice();
   }
 
   /** O(1) */
@@ -38,7 +38,7 @@ export class TreeStore {
 
   /** O(1) */
   getChildren(id: string | number | null): TreeNode[] {
-    return this.childrenMap.get(id) ?? [];
+    return this.childrenMap.get(id)?.slice() ?? [];
   }
 
   /** O(N descendants) */
