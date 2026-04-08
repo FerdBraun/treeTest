@@ -44,11 +44,10 @@ export class TreeStore {
   /** O(N descendants) */
   getAllChildren(id: string | number): TreeNode[] {
     const result: TreeNode[] = [];
-    const queue = this.childrenMap.get(id);
+    const queue = [...(this.childrenMap.get(id) ?? [])];
 
-    if (!queue || queue.length === 0) return result;
+    if (queue.length === 0) return result;
 
-    // микро-оптимизация: без shift()
     for (let i = 0; i < queue.length; i++) {
       const node = queue[i];
       result.push(node);
