@@ -1,5 +1,13 @@
-# Vue 3 + TypeScript + Vite
+Результаты выполненной работы 
+1. Минималистичный интерфейс для отображения мок данных
+  <img width="941" height="525" alt="image" src="https://github.com/user-attachments/assets/36122421-4d17-4b3f-91b8-1e4282e28f8e" />
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+2. Разработанные и покрытые тестами методы класса и vue страницы.
+   <img width="821" height="100" alt="image" src="https://github.com/user-attachments/assets/1b8f88d4-7c93-49c0-9671-49baaba7f03d" />
+
+
+3. Использование и тестирования TypeScript для работы с проектом.
+   <img width="577" height="40" alt="image" src="https://github.com/user-attachments/assets/c486e474-59c1-4506-abdf-8115eaee8260" />
+
+Буду ждать обратной связи!
